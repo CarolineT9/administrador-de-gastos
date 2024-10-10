@@ -10,6 +10,7 @@ const modal = reactive({
 })
 const orcamento = ref(0)
 const disponivel = ref(0)
+
 const definirOrcamento = (valor)=>{
   orcamento.value = ref(valor)
   disponivel.value =  ref(valor)
@@ -17,12 +18,21 @@ const definirOrcamento = (valor)=>{
 
 const mostrarModal = () => {
   modal.mostrar = true
-  modal.animar = true
+  setTimeout(()=>{
+    modal.animar = true
+  },300)
+
+  
+
   
 }
 const fecharModal = () => {
-  modal.mostrar = false
+  
   modal.animar = false
+  setTimeout(()=>{
+    modal.mostrar = false
+  },300)
+  
   
 }
 </script>
@@ -41,7 +51,7 @@ const fecharModal = () => {
         <img @click="mostrarModal" :src="iconeNovoGasto" alt="icone de novo gasto">
       </div>
     </main>
-    <Modal @fechar-modal="fecharModal" v-if="modal.mostrar === true"/>
+    <Modal @fechar-modal="fecharModal" :modal="modal" v-if="modal.mostrar === true"/>
   </div>
 </template>
 

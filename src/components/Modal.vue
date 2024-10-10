@@ -2,6 +2,12 @@
 import fecharModal from '../assets/img/cerrar.svg'
 
 const emit = defineEmits(['fechar-modal'])
+const props = defineProps({
+  modal:{
+    type: Object,
+    required: true
+  }
+})
 </script>
 
 <template>
@@ -9,8 +15,12 @@ const emit = defineEmits(['fechar-modal'])
     <div class="fechar-modal">
       <img @click="$event => $emit('fechar-modal')" :src="fecharModal" alt="">
     </div>
-    <div class="conteudo">
-      <form >
+    <div class="conteudo conteudo-formulario"
+    :class="[modal.animar ? 'animar' : 'fechar' ]"
+    
+    
+    >
+      <form class="novo-gasto">
         <legend>Adicionar gasto</legend>
         <div class="campo">
           <label for="nome">Gasto: </label>
@@ -56,5 +66,49 @@ const emit = defineEmits(['fechar-modal'])
 .fechar-modal img{
   width: 3rem;
   cursor: pointer;
+}
+.conteudo-formulario{
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+  opacity: 0;
+}
+.conteudo-formulario.animar{
+  opacity: 1;
+}
+.conteudo-formulario.fechar{
+  opacity: 0;
+}
+.novo-gasto{
+  margin: 10rem auto 0 auto;
+  display: grid;
+  gap: 2rem;
+}
+
+.novo-gasto input[type="submit"]{
+  background-color: var(--azul);
+  color: var(--branco);
+  font-weight: 700;
+  cursor: pointer;
+}
+.novo-gasto label{
+  color: var(--branco);
+  font-size: 3rem;
+}
+.novo-gasto legend{
+ text-align: center;
+ color: var(--branco);
+ font-weight: 700;
+}
+.novo-gasto select, input{
+  background-color: var(--cinza-claro);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  font-size: 2.2rem;
+}
+.campo{
+  display: grid;
+  gap: 2rem;
 }
 </style>
