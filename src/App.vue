@@ -20,11 +20,7 @@ const mostrarModal = () => {
   modal.mostrar = true
   setTimeout(()=>{
     modal.animar = true
-  },300)
-
-  
-
-  
+  },300)  
 }
 const fecharModal = () => {
   
@@ -32,9 +28,17 @@ const fecharModal = () => {
   setTimeout(()=>{
     modal.mostrar = false
   },300)
-  
-  
 }
+
+const gastos = reactive({
+  nome: '', 
+  quantidade: '',
+  categoria: '',
+  id: null,
+  data: Date.now()
+
+})
+
 </script>
 
 <template>
@@ -51,7 +55,15 @@ const fecharModal = () => {
         <img @click="mostrarModal" :src="iconeNovoGasto" alt="icone de novo gasto">
       </div>
     </main>
-    <Modal @fechar-modal="fecharModal" :modal="modal" v-if="modal.mostrar === true"/>
+    <Modal 
+    @fechar-modal="fecharModal" 
+    :modal="modal" 
+    v-if="modal.mostrar === true"
+    v-model:nome="gastos.nome"
+    v-model:quantidade="gastos.quantidade"
+    v-model:categoria="gastos.categoria"
+    
+    />
   </div>
 </template>
 
