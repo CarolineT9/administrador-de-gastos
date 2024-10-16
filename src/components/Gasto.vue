@@ -13,13 +13,13 @@ import IconoSuscripciones from '../assets/img/icono_suscripciones.svg'
 //dicionario de icones
 
 const diccionarioIconos = {
-        ahorro : IconoAhorro,
+        investimento : IconoAhorro,
         comida : IconoComida,
         casa : IconoCasa,
         gastos : IconoGastos,
-        ocio : IconoOcio,
-        salud : IconoSalud,
-        suscripciones : IconoSuscripciones
+        lazer : IconoOcio,
+        saude : IconoSalud,
+        varios : IconoSuscripciones
     }
 
 const props = defineProps({
@@ -32,18 +32,71 @@ const props = defineProps({
 
 <template>
     <div class="gasto sombra">
-        <div class="conteudo">
+        <div class="container">
+            <img :src="diccionarioIconos[gasto.categoria]" alt="icone gastos" class="icone">
             <div class="detalhes">
-                <img :src="diccionarioIconos[gasto.categoria]" alt="icone gastos" class="icone">
-                <p>{{ gasto.categoria }}</p>
+                
+                <p class="categoria">{{ gasto.categoria }}</p>
                 <p class="nome">{{ gasto.nome }}</p>
-                <p>{{ formatarData(gasto.data) }}</p>
-
+                <p  class="data">
+                    Data:
+                    <span>
+                        {{ formatarData(gasto.data) }}
+                    </span>
+                    
+                </p>
+                <p class="quantidade">{{ formatarMoeda(gasto.quantidade) }}</p>
             </div>
         </div>
-        <p>{{ formatarMoeda(gasto.quantidade) }}</p>
+       
     </div>
 </template>
 
 
-<style></style>
+<style>
+.gasto{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.container{
+    display: flex;
+    align-items: center;
+    gap:  2rem
+}
+.icone{
+    width: 5rem;
+}
+.detalhes p{
+    margin: 0 0 1rem 0;
+}
+
+.categoria{
+    color: var(--cinza);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+.nome{
+    color: var(--cinza-escuro);
+    font-size: 2.4rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.data{
+    color: var(--cinza-escuro);
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+.data span{
+
+    font-weight: 400;
+}
+.quantidade{
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0;
+}
+</style>

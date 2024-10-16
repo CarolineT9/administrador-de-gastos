@@ -5,11 +5,15 @@ import { formatarMoeda } from '../helpers'
 const props = defineProps({
     orcamento: {
         type: Number,
-        default: 0 // Adiciona valor padrão
+        required: true 
     },
     disponivel: {
         type: Number,
-        default: 0 // Adiciona valor padrão
+        required: true 
+    },
+    gastado: {
+        type: Number,
+        required: true 
     }
 })
 </script>
@@ -22,13 +26,13 @@ const props = defineProps({
     <div class="conteudo-orcamento">
         <button class="reset-app">Resetar App</button>
         <p>
-            <span>Orçamento:  {{ formatarMoeda(orcamento)  }}</span>
+            <span>Orçamento:  </span>{{ formatarMoeda(orcamento)  }}
         </p>
         <p>
-            <span>Disponível:  {{ formatarMoeda(disponivel)  }}</span>
+            <span>Disponível:  </span>{{ formatarMoeda(disponivel)  }}
         </p>
         <p>
-            <span>Gastos: </span>
+            <span>Gastos: {{ formatarMoeda(gastado)  }}   </span>
         </p>
     </div>
   </div>

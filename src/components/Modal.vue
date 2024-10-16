@@ -89,9 +89,11 @@ const adicionarGasto = () => {
           <select  :value="categoria" 
           @input="$event => $emit('update:categoria', $event.target.value)" >
             <option value="">Selecione</option>
-            <option value="poupanca">Poupança</option>
+            <option value="investimento">Investimento</option>
             <option value="comida">Comida</option>
             <option value="casa">Casa</option>
+            <option value="gastos">Gastos</option>
+            <option value="lazer">Lazer</option>
             <option value="varios">Vários</option>
             <option value="saude">Saúde</option>
           </select>

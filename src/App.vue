@@ -1,23 +1,34 @@
 <script setup>
+import { ref, reactive, watch } from 'vue';
 import Orcamento from './components/Orcamento.vue';
-import { ref, reactive } from 'vue';
 import ControlOrcamento from './components/ControlOrcamento.vue';
 import iconeNovoGasto from './assets/img/nuevo-gasto.svg'
 import Modal from './components/Modal.vue'
 import { gerarId } from './helpers'
 import Gasto from './components/Gasto.vue'
+
 const modal = reactive({
   mostrar: false,
   animar: false
 })
 const orcamento = ref(0)
 const disponivel = ref(0)
+const gastado = ref(0)
 
-const totalGastos = reactive([])
+const gastos = reactive([])
 
-const definirOrcamento = (valor) => {
-  orcamento.value = ref(valor)
-  disponivel.value = ref(valor)
+watch(gastos, () => {
+  const totalDespesas = gastos.reduce((total, gasto) => gasto.quantidade + total, 0)
+    gastado.value = totalDespesas
+    disponivel.value =  orcamento.value - gastado.value 
+},
+{
+ deep: true 
+})
+
+const definirOrcamento = (quantidade) => {
+  orcamento.value = quantidade
+  disponivel.value = quantidade
 }
 
 const mostrarModal = () => {
@@ -43,7 +54,7 @@ const gasto = reactive({
 
 })
 const valorGasto = () => {
-  totalGastos.push({
+  gastos.push({
     ...gasto,
     id: gerarId,
 
@@ -63,20 +74,21 @@ const valorGasto = () => {
 </script>
 
 <template>
-  <div>
+  <div :class="{fechar: modal.mostrar === true}">
     <header>
       <h1>Gestor de despesas</h1>
+    
       <div class="conteudo-header conteudo sombra">
         <Orcamento v-if="orcamento === 0" @definir-orcamento="definirOrcamento" />
-        <ControlOrcamento v-else :orcamento="orcamento" :disponivel="disponivel" />
+        <ControlOrcamento v-else :orcamento="orcamento" :gastado="gastado" :disponivel="disponivel" />
       </div>
     </header>
-    <main v-if="orcamento.value > 0">
+    <main v-if="orcamento> 0">
 
       <div class="lista-gastos conteudo">
-        <h2>{{totalGastos.length > 0 ? 'Gastos' : 'Não há gastos' }}</h2>
+        <h2>{{gastos.length > 0 ? 'Gastos' : 'Não há gastos' }}</h2>
      
-        <Gasto v-for="gasto in totalGastos" :key="gasto.id" :gasto="gasto"/>
+        <Gasto v-for="gasto in gastos" :key="gasto.id" :gasto="gasto"/>
       </div>
 
 
@@ -167,5 +179,10 @@ margin-top: 10rem;
 .lista-gastos h2{
   font-weight: 900;
   color: var(--cinza-escuro)
+}
+
+.fechar{
+  overflow: hidden;
+  height: 100vh;
 }
 </style>
