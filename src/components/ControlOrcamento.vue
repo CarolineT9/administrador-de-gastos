@@ -1,6 +1,6 @@
 <script setup>
 import imagem from '../assets/img/grafico.jpg'
-// import { formatarMoeda } from '../helpers'
+import { formatarMoeda } from '../helpers'
 
 const props = defineProps({
     orcamento: {
@@ -22,10 +22,10 @@ const props = defineProps({
     <div class="conteudo-orcamento">
         <button class="reset-app">Resetar App</button>
         <p>
-            <span>Orçamento: R$ {{ orcamento }}</span>
+            <span>Orçamento:  {{ formatarMoeda(orcamento)  }}</span>
         </p>
         <p>
-            <span>Disponível: R$ {{disponivel }}</span>
+            <span>Disponível:  {{ formatarMoeda(disponivel)  }}</span>
         </p>
         <p>
             <span>Gastos: </span>

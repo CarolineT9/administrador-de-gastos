@@ -1,9 +1,11 @@
 <script setup>
 import Orcamento from './components/Orcamento.vue';
-import { ref, reactive} from 'vue';
+import { ref, reactive } from 'vue';
 import ControlOrcamento from './components/ControlOrcamento.vue';
 import iconeNovoGasto from './assets/img/nuevo-gasto.svg'
-import Modal from  './components/Modal.vue'
+import Modal from './components/Modal.vue'
+import { gerarId } from './helpers'
+import Gasto from './components/Gasto.vue'
 const modal = reactive({
   mostrar: false,
   animar: false
@@ -11,33 +13,52 @@ const modal = reactive({
 const orcamento = ref(0)
 const disponivel = ref(0)
 
-const definirOrcamento = (valor)=>{
+const totalGastos = reactive([])
+
+const definirOrcamento = (valor) => {
   orcamento.value = ref(valor)
-  disponivel.value =  ref(valor)
-} 
+  disponivel.value = ref(valor)
+}
 
 const mostrarModal = () => {
   modal.mostrar = true
-  setTimeout(()=>{
+  setTimeout(() => {
     modal.animar = true
-  },300)  
+  }, 300)
 }
 const fecharModal = () => {
-  
+
   modal.animar = false
-  setTimeout(()=>{
+  setTimeout(() => {
     modal.mostrar = false
-  },300)
+  }, 300)
 }
 
-const gastos = reactive({
-  nome: '', 
+const gasto = reactive({
+  nome: '',
   quantidade: '',
   categoria: '',
   id: null,
   data: Date.now()
 
 })
+const valorGasto = () => {
+  totalGastos.push({
+    ...gasto,
+    id: gerarId,
+
+  })
+  fecharModal()
+
+  // reiniciar objeto
+  Object.assign(gasto, {
+    nome: '',
+    quantidade: '',
+    categoria: '',
+    id: null,
+    data: Date.now()
+  })
+}
 
 </script>
 
@@ -46,24 +67,25 @@ const gastos = reactive({
     <header>
       <h1>Gestor de despesas</h1>
       <div class="conteudo-header conteudo sombra">
-        <Orcamento v-if="orcamento === 0 " @definir-orcamento="definirOrcamento"/>
-        <ControlOrcamento v-else :orcamento="orcamento" :disponivel="disponivel"/>
-      </div>      
+        <Orcamento v-if="orcamento === 0" @definir-orcamento="definirOrcamento" />
+        <ControlOrcamento v-else :orcamento="orcamento" :disponivel="disponivel" />
+      </div>
     </header>
-    <main  v-if="orcamento.value>0">
-      <div class="criar-gastos" >
+    <main v-if="orcamento.value > 0">
+
+      <div class="lista-gastos conteudo">
+        <h2>{{totalGastos.length > 0 ? 'Gastos' : 'Não há gastos' }}</h2>
+     
+        <Gasto v-for="gasto in totalGastos" :key="gasto.id" :gasto="gasto"/>
+      </div>
+
+
+      <div class="criar-gastos">
         <img @click="mostrarModal" :src="iconeNovoGasto" alt="icone de novo gasto">
       </div>
     </main>
-    <Modal 
-    @fechar-modal="fecharModal" 
-    :modal="modal" 
-    v-if="modal.mostrar === true"
-    v-model:nome="gastos.nome"
-    v-model:quantidade="gastos.quantidade"
-    v-model:categoria="gastos.categoria"
-    
-    />
+    <Modal :modal="modal" v-if="modal.mostrar === true" v-model:nome="gasto.nome" v-model:quantidade="gasto.quantidade"
+      v-model:categoria="gasto.categoria" @fechar-modal="fecharModal" @valor-gasto="valorGasto" />
   </div>
 </template>
 
@@ -117,25 +139,33 @@ header h1 {
 }
 
 .conteudo-header {
-margin-top: -7rem;
-transform: translateY(5rem);
-padding: 5rem;
+  margin-top: -7rem;
+  transform: translateY(5rem);
+  padding: 5rem;
 }
 
 .sombra {
-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
-background-color: var(--branco);
-border-radius: 1.2rem;
-padding: 5rem;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: var(--branco);
+  border-radius: 1.2rem;
+  padding: 5rem;
 }
 
-.criar-gastos{
-position: fixed;
-bottom: 5rem;
-right: 5rem;
+.criar-gastos {
+  position: fixed;
+  bottom: 5rem;
+  right: 5rem;
 }
-.criar-gastos img{
+
+.criar-gastos img {
   width: 5rem;
   cursor: pointer;
+}
+.lista-gastos{
+margin-top: 10rem;
+}
+.lista-gastos h2{
+  font-weight: 900;
+  color: var(--cinza-escuro)
 }
 </style>
